@@ -37,19 +37,19 @@ while (true)
     switch (mainOption)
     {
         case "1":
-            StudentsMenu();
+            await StudentsMenu();
             break;
         case "2":
-            CoursesMenu();
+            await CoursesMenu();
             break;
         case "3":
-            GroupsMenu();
+            await GroupsMenu();
             break;
         case "4":
-            MentorsMenu();
+            await MentorsMenu();
             break;
         case "5":
-            StudentGroupsMenu();
+            await StudentGroupsMenu();
             break;
         case "0":
             System.Console.WriteLine("Exiting ...");
@@ -57,7 +57,7 @@ while (true)
     }
 }
 
-void StudentsMenu()
+async Task StudentsMenu()
 {
     while (true)
     {
@@ -74,12 +74,12 @@ void StudentsMenu()
         switch (option)
         {
             case "1":
-                studentService.GetAllStudents();
+                await studentService.GetAllStudentsAsync();
                 break;
             case "2":
                 System.Console.Write("Enter id: ");
                 var student_id = Convert.ToInt32(Console.ReadLine());
-                studentService.GetStudent(student_id);
+                await studentService.GetStudentAsync(student_id);
                 break;
             case "3":
                 System.Console.Write("Enter fullname: ");
@@ -97,7 +97,7 @@ void StudentsMenu()
                     Phone = phone,
                     EnrollmentDate = DateOnly.FromDateTime(enrollmentDate)
                 };
-                studentService.AddStudent(student);
+                await studentService.AddStudentAsync(student);
                 break;
             case "4":
                 System.Console.Write("Enter id: ");
@@ -118,12 +118,12 @@ void StudentsMenu()
                     Phone = uPhone,
                     EnrollmentDate = DateOnly.FromDateTime(uEnrollmentDate)
                 };
-                studentService.UpdateStudent(uStudent);
+                await studentService.UpdateStudentAsync(uStudent);
                 break;
             case "5":
                 System.Console.Write("Enter id: ");
                 var dStudentId = Convert.ToInt32(Console.ReadLine());
-                studentService.DeleteStudent(dStudentId);
+                await studentService.DeleteStudentAsync(dStudentId);
                 break;
             case "0":
                 return;
@@ -131,7 +131,7 @@ void StudentsMenu()
     }
 }
 
-void CoursesMenu()
+async Task CoursesMenu()
 {
     while (true)
     {
@@ -148,12 +148,12 @@ void CoursesMenu()
         switch (option)
         {
             case "1":
-                courseService.GetAllCourses();
+                await courseService.GetAllCoursesAsync();
                 break;
             case "2":
                 System.Console.Write("Enter id: ");
                 var course_id = Convert.ToInt32(Console.ReadLine());
-                courseService.GetCourse(course_id);
+                await courseService.GetCourseAsync(course_id);
                 break;
             case "3":
                 System.Console.Write("Enter title: ");
@@ -168,7 +168,7 @@ void CoursesMenu()
                     Description = description,
                     DurationWeeks = durationWeeks
                 };
-                courseService.AddCourse(course);
+                await courseService.AddCourseAsync(course);
                 break;
             case "4":
                 System.Console.Write("Enter id: ");
@@ -186,12 +186,12 @@ void CoursesMenu()
                     Description = uDescription,
                     DurationWeeks = uDurationWeeks
                 };
-                courseService.UpdateCourse(uCourse);
+                await courseService.UpdateCourseAsync(uCourse);
                 break;
             case "5":
                 System.Console.Write("Enter id: ");
                 var dCourseId = Convert.ToInt32(Console.ReadLine());
-                courseService.DeleteCourse(dCourseId);
+                await courseService.DeleteCourseAsync(dCourseId);
                 break;
             case "0":
                 return;
@@ -199,7 +199,7 @@ void CoursesMenu()
     }
 }
 
-void GroupsMenu()
+async Task GroupsMenu()
 {
     while (true)
     {
@@ -216,12 +216,12 @@ void GroupsMenu()
         switch (option)
         {
             case "1":
-                groupService.GetAllGroups();
+                await groupService.GetAllGroupsAsync();
                 break;
             case "2":
                 System.Console.Write("Enter id: ");
                 var group_id = Convert.ToInt32(Console.ReadLine());
-                groupService.GetGroup(group_id);
+                await groupService.GetGroupAsync(group_id);
                 break;
             case "3":
                 System.Console.Write("Enter group name: ");
@@ -242,7 +242,7 @@ void GroupsMenu()
                     StartDate = DateOnly.FromDateTime(startDate),
                     EndDate = DateOnly.FromDateTime(endDate)
                 };
-                groupService.AddGroup(group);
+                await groupService.AddGroupAsync(group);
                 break;
             case "4":
                 System.Console.Write("Enter id: ");
@@ -266,12 +266,12 @@ void GroupsMenu()
                     StartDate = DateOnly.FromDateTime(uStartDate),
                     EndDate = DateOnly.FromDateTime(uEndDate)
                 };
-                groupService.UpdateGroup(uGroup);
+                await groupService.UpdateGroupAsync(uGroup);
                 break;
             case "5":
                 System.Console.Write("Enter id: ");
                 var dGroupId = Convert.ToInt32(Console.ReadLine());
-                groupService.DeleteGroup(dGroupId);
+                await groupService.DeleteGroupAsync(dGroupId);
                 break;
             case "0":
                 return;
@@ -279,7 +279,7 @@ void GroupsMenu()
     }
 }
 
-void MentorsMenu()
+async Task MentorsMenu()
 {
     while (true)
     {
@@ -296,12 +296,12 @@ void MentorsMenu()
         switch (option)
         {
             case "1":
-                mentorService.GetAllMentors();
+                await mentorService.GetAllMentorsAsync();
                 break;
             case "2":
                 System.Console.Write("Enter id: ");
                 var mentor_id = Convert.ToInt32(Console.ReadLine());
-                mentorService.GetMentor(mentor_id);
+                await mentorService.GetMentorAsync(mentor_id);
                 break;
             case "3":
                 System.Console.Write("Enter fullname: ");
@@ -319,7 +319,7 @@ void MentorsMenu()
                     Phone = phone,
                     Specialization = specialization
                 };
-                mentorService.AddMentor(mentor);
+                await mentorService.AddMentorAsync(mentor);
                 break;
             case "4":
                 System.Console.Write("Enter id: ");
@@ -340,12 +340,12 @@ void MentorsMenu()
                     Phone = uPhone,
                     Specialization = uSpecialization
                 };
-                mentorService.UpdateMentor(uMentor);
+                await mentorService.UpdateMentorAsync(uMentor);
                 break;
             case "5":
                 System.Console.Write("Enter id: ");
                 var dMentorId = Convert.ToInt32(Console.ReadLine());
-                mentorService.DeleteMentor(dMentorId);
+                await mentorService.DeleteMentorAsync(dMentorId);
                 break;
             case "0":
                 return;
@@ -353,7 +353,7 @@ void MentorsMenu()
     }
 }
 
-void StudentGroupsMenu()
+async Task StudentGroupsMenu()
 {
     while (true)
     {
@@ -370,12 +370,12 @@ void StudentGroupsMenu()
         switch (option)
         {
             case "1":
-                studentGroupService.GetAllStudentGroups();
+                await studentGroupService.GetAllStudentGroupsAsync();
                 break;
             case "2":
                 System.Console.Write("Enter id: ");
                 var studentGroup_id = Convert.ToInt32(Console.ReadLine());
-                studentGroupService.GetStudentGroup(studentGroup_id);
+                await studentGroupService.GetStudentGroupAsync(studentGroup_id);
                 break;
             case "3":
                 System.Console.Write("Enter student id: ");
@@ -390,7 +390,7 @@ void StudentGroupsMenu()
                     GroupId = groupId,
                     Status = status
                 };
-                studentGroupService.AddStudentGroup(studentGroup);
+                await studentGroupService.AddStudentGroupAsync(studentGroup);
                 break;
             case "4":
                 System.Console.Write("Enter id: ");
@@ -408,12 +408,12 @@ void StudentGroupsMenu()
                     GroupId = uGroupId,
                     Status = uStatus
                 };
-                studentGroupService.UpdateStudentGroup(uStudentGroup);
+                await studentGroupService.UpdateStudentGroupAsync(uStudentGroup);
                 break;
             case "5":
                 System.Console.Write("Enter id: ");
                 var dStudentGroupId = Convert.ToInt32(Console.ReadLine());
-                studentGroupService.DeleteStudentGroup(dStudentGroupId);
+                await studentGroupService.DeleteStudentGroupAsync(dStudentGroupId);
                 break;
             case "0":
                 return;

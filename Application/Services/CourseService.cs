@@ -8,40 +8,39 @@ namespace Application.Services;
 public class CourseService(CourseRepository courseRepository) : ICourseService
 {
     private CourseRepository _repository = courseRepository;
-    public void AddCourse(Courses course)
+    public async Task AddCourseAsync(Courses course)
     {
-        var result =  _repository.AddCourse(course);
+        var result = await _repository.AddCourseAsync(course);
         if(result) System.Console.WriteLine("Added successfully!");
         else System.Console.WriteLine("Something went wrong!"); 
     }
 
-    public void DeleteCourse(int courseId)
+    public async Task DeleteCourseAsync(int courseId)
     {
-        var result =  _repository.DeleteCourse(courseId);
+        var result = await _repository.DeleteCourseAsync(courseId);
         if(result) System.Console.WriteLine("Deleted successfully!");
         else System.Console.WriteLine("Something went wrong!"); 
     }
 
-    public void GetAllCourses()
+    public async Task GetAllCoursesAsync()
     {
-       var courses = _repository.GetCourses();
+       var courses = await _repository.GetCoursesAsync();
        foreach (var course in courses)
        {
             System.Console.WriteLine(course.CourseId+" "+course.Title+" "+course.Description+" "+course.DurationWeeks);
        }
     }
 
-    public void GetCourse(int courseId)
+    public async Task GetCourseAsync(int courseId)
     {
-        var course = _repository.GetCourse(courseId);
+        var course = await _repository.GetCourseAsync(courseId);
         System.Console.WriteLine(course.CourseId+" "+course.Title+" "+course.Description+" "+course.DurationWeeks);
     }
 
-    public void UpdateCourse(Courses course)
+    public async Task UpdateCourseAsync(Courses course)
     {
-        var result = _repository.UpdateCourse(course);
+        var result = await _repository.UpdateCourseAsync(course);
         if(result) System.Console.WriteLine("Updated successfully!");
         else System.Console.WriteLine("Something went wrong!");
     }
-
 }

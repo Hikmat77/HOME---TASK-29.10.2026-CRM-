@@ -4,9 +4,9 @@ namespace Application.Interfaces;
 
 public interface ICourseService
 {
-    void AddCourse(Courses course);
-    void UpdateCourse(Courses course);
-    void DeleteCourse(int courseId);
-    void GetCourse(int courseId);
-    void GetAllCourses();
+    Task AddCourseAsync(Courses course);
+    Task UpdateCourseAsync(Courses course);
+    Task DeleteCourseAsync(int courseId);
+    Task GetCourseAsync(int courseId);
+    Task GetAllCoursesAsync();
 }

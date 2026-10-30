@@ -24,3 +24,4 @@ C:\Users\firuz\OneDrive\Desktop\CRMday3\ConsoleApp\obj\Debug\net10.0\ConsoleApp.
 C:\Users\firuz\OneDrive\Desktop\CRMday3\ConsoleApp\obj\Debug\net10.0\ref\ConsoleApp.dll
 C:\Users\firuz\OneDrive\Desktop\CRMday3\ConsoleApp\bin\Debug\net10.0\Application.dll
 C:\Users\firuz\OneDrive\Desktop\CRMday3\ConsoleApp\bin\Debug\net10.0\Application.pdb
+C:\Users\firuz\OneDrive\Desktop\CRMday3\ConsoleApp\obj\Debug\net10.0\ConsoleApp.sourcelink.json
