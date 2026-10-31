@@ -43,4 +43,22 @@ public class GroupService(GroupRepository groupRepository) : IGroupService
         if(result) System.Console.WriteLine("Updated successfully!");
         else System.Console.WriteLine("Something went wrong!");
     }
+
+    public async Task GetStudentsPerGroupAsync()
+    {
+       var groups = await _repository.GetStudentsPerGroupAsync();
+       foreach (var group in groups)
+       {
+            System.Console.WriteLine(group.groupid+" "+group.groupname+" "+group.studentcount);
+       }
+    }
+
+    public async Task GetEmptyGroupsAsync()
+    {
+       var groups = await _repository.GetEmptyGroupsAsync();
+       foreach (var group in groups)
+       {
+            System.Console.WriteLine(group.GroupId+" "+group.GroupName+" "+group.CourseId+" "+group.MentorId+" "+group.StartDate+" "+group.EndDate);
+       }
+    }
 }

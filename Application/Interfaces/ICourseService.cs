@@ -9,4 +9,8 @@ public interface ICourseService
     Task DeleteCourseAsync(int courseId);
     Task GetCourseAsync(int courseId);
     Task GetAllCoursesAsync();
+    Task GetStudentsPerCourseAsync();
+    Task GetMostPopularCourseAsync();
+    Task GetLeastPopularCoursesAsync();
+    Task GetTopThreeCoursesAsync();
 }

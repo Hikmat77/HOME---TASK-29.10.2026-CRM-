@@ -43,4 +43,38 @@ public class CourseService(CourseRepository courseRepository) : ICourseService
         if(result) System.Console.WriteLine("Updated successfully!");
         else System.Console.WriteLine("Something went wrong!");
     }
+
+    public async Task GetStudentsPerCourseAsync()
+    {
+       var courses = await _repository.GetStudentsPerCourseAsync();
+       foreach (var course in courses)
+       {
+            System.Console.WriteLine(course.courseid+" "+course.title+" "+course.studentcount);
+       }
+    }
+
+    public async Task GetMostPopularCourseAsync()
+    {
+        var course = await _repository.GetMostPopularCourseAsync();
+        if(course == null) System.Console.WriteLine("Nothing found!");
+        else System.Console.WriteLine(course.courseid+" "+course.title+" "+course.studentcount);
+    }
+
+    public async Task GetLeastPopularCoursesAsync()
+    {
+       var courses = await _repository.GetLeastPopularCoursesAsync();
+       foreach (var course in courses)
+       {
+            System.Console.WriteLine(course.courseid+" "+course.title+" "+course.studentcount);
+       }
+    }
+
+    public async Task GetTopThreeCoursesAsync()
+    {
+       var courses = await _repository.GetTopThreeCoursesAsync();
+       foreach (var course in courses)
+       {
+            System.Console.WriteLine(course.courseid+" "+course.title+" "+course.studentcount);
+       }
+    }
 }

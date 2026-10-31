@@ -9,4 +9,6 @@ public interface IGroupRepository
     Task<bool> DeleteGroupAsync(int groupId);
     Task<Groups> GetGroupAsync(int groupId);
     Task<List<Groups>> GetGroupsAsync();
+    Task<List<dynamic>> GetStudentsPerGroupAsync();
+    Task<List<Groups>> GetEmptyGroupsAsync();
 }

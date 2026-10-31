@@ -22,6 +22,12 @@ var mentorService = new MentorService(mentorRepository);
 var studentGroupRepository = new StudentGroupRepository(appDbContext);
 var studentGroupService = new StudentGroupService(studentGroupRepository);
 
+var statisticsRepository = new StatisticsRepository(appDbContext);
+var statisticsService = new StatisticsService(statisticsRepository);
+
+var analyticsRepository = new AnalyticsRepository(appDbContext);
+var analyticsService = new AnalyticsService(analyticsRepository);
+
 while (true)
 {
     System.Console.WriteLine("==================================");
@@ -30,6 +36,8 @@ while (true)
 3 - Groups.
 4 - Mentors.
 5 - Student groups.
+6 - Statistics.
+7 - Analytics.
 0 - Exit.");
     var mainOption = Console.ReadLine();
     System.Console.WriteLine("==================================");
@@ -51,6 +59,12 @@ while (true)
         case "5":
             await StudentGroupsMenu();
             break;
+        case "6":
+            await StatisticsMenu();
+            break;
+        case "7":
+            await AnalyticsMenu();
+            break;
         case "0":
             System.Console.WriteLine("Exiting ...");
             return;
@@ -67,6 +81,10 @@ async Task StudentsMenu()
 3 - Add new student.
 4 - Update student.
 5 - Delete student.
+6 - Show students with groups.
+7 - Show students without groups.
+8 - Show dropped out students.
+9 - Show graduated students.
 0 - Back.");
         var option = Console.ReadLine();
         System.Console.WriteLine("==================================");
@@ -125,6 +143,18 @@ async Task StudentsMenu()
                 var dStudentId = Convert.ToInt32(Console.ReadLine());
                 await studentService.DeleteStudentAsync(dStudentId);
                 break;
+            case "6":
+                await studentService.GetStudentsWithGroupsAsync();
+                break;
+            case "7":
+                await studentService.GetStudentsWithoutGroupsAsync();
+                break;
+            case "8":
+                await studentService.GetDroppedOutStudentsAsync();
+                break;
+            case "9":
+                await studentService.GetGraduatedStudentsAsync();
+                break;
             case "0":
                 return;
         }
@@ -141,6 +171,10 @@ async Task CoursesMenu()
 3 - Add new course.
 4 - Update course.
 5 - Delete course.
+6 - Show students per course.
+7 - Show most popular course.
+8 - Show least popular courses.
+9 - Show top three courses.
 0 - Back.");
         var option = Console.ReadLine();
         System.Console.WriteLine("==================================");
@@ -193,6 +227,18 @@ async Task CoursesMenu()
                 var dCourseId = Convert.ToInt32(Console.ReadLine());
                 await courseService.DeleteCourseAsync(dCourseId);
                 break;
+            case "6":
+                await courseService.GetStudentsPerCourseAsync();
+                break;
+            case "7":
+                await courseService.GetMostPopularCourseAsync();
+                break;
+            case "8":
+                await courseService.GetLeastPopularCoursesAsync();
+                break;
+            case "9":
+                await courseService.GetTopThreeCoursesAsync();
+                break;
             case "0":
                 return;
         }
@@ -209,6 +255,8 @@ async Task GroupsMenu()
 3 - Add new group.
 4 - Update group.
 5 - Delete group.
+6 - Show students per group.
+7 - Show empty groups.
 0 - Back.");
         var option = Console.ReadLine();
         System.Console.WriteLine("==================================");
@@ -273,6 +321,12 @@ async Task GroupsMenu()
                 var dGroupId = Convert.ToInt32(Console.ReadLine());
                 await groupService.DeleteGroupAsync(dGroupId);
                 break;
+            case "6":
+                await groupService.GetStudentsPerGroupAsync();
+                break;
+            case "7":
+                await groupService.GetEmptyGroupsAsync();
+                break;
             case "0":
                 return;
         }
@@ -289,6 +343,8 @@ async Task MentorsMenu()
 3 - Add new mentor.
 4 - Update mentor.
 5 - Delete mentor.
+6 - Show mentor with most students.
+7 - Show mentors with multiple courses.
 0 - Back.");
         var option = Console.ReadLine();
         System.Console.WriteLine("==================================");
@@ -346,6 +402,12 @@ async Task MentorsMenu()
                 System.Console.Write("Enter id: ");
                 var dMentorId = Convert.ToInt32(Console.ReadLine());
                 await mentorService.DeleteMentorAsync(dMentorId);
+                break;
+            case "6":
+                await mentorService.GetMentorWithMostStudentsAsync();
+                break;
+            case "7":
+                await mentorService.GetMentorsWithMultipleCoursesAsync();
                 break;
             case "0":
                 return;
@@ -414,6 +476,64 @@ async Task StudentGroupsMenu()
                 System.Console.Write("Enter id: ");
                 var dStudentGroupId = Convert.ToInt32(Console.ReadLine());
                 await studentGroupService.DeleteStudentGroupAsync(dStudentGroupId);
+                break;
+            case "0":
+                return;
+        }
+    }
+}
+
+async Task StatisticsMenu()
+{
+    while (true)
+    {
+        System.Console.WriteLine("==================================");
+        System.Console.WriteLine(@"1 - Total students count.
+2 - Total groups count.
+3 - Total courses count.
+4 - Total mentors count.
+5 - All start dates.
+0 - Back.");
+        var option = Console.ReadLine();
+        System.Console.WriteLine("==================================");
+
+        switch (option)
+        {
+            case "1":
+                await statisticsService.GetTotalStudentsCountAsync();
+                break;
+            case "2":
+                await statisticsService.GetTotalGroupsCountAsync();
+                break;
+            case "3":
+                await statisticsService.GetTotalCoursesCountAsync();
+                break;
+            case "4":
+                await statisticsService.GetTotalMentorsCountAsync();
+                break;
+            case "5":
+                await statisticsService.GetAllStartDatesAsync();
+                break;
+            case "0":
+                return;
+        }
+    }
+}
+
+async Task AnalyticsMenu()
+{
+    while (true)
+    {
+        System.Console.WriteLine("==================================");
+        System.Console.WriteLine(@"1 - Completion rate.
+0 - Back.");
+        var option = Console.ReadLine();
+        System.Console.WriteLine("==================================");
+
+        switch (option)
+        {
+            case "1":
+                await analyticsService.GetCompletionRateAsync();
                 break;
             case "0":
                 return;

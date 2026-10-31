@@ -43,4 +43,40 @@ public class StudentService(StudentRepository studentRepository) : IStudentServi
         if(result) System.Console.WriteLine("Updated successfully!");
         else System.Console.WriteLine("Something went wrong!");
     }
+
+    public async Task GetStudentsWithGroupsAsync()
+    {
+       var students = await _repository.GetStudentsWithGroupsAsync();
+       foreach (var student in students)
+       {
+            System.Console.WriteLine(student.studentid+" "+student.fullname+" "+student.groupname);
+       }
+    }
+
+    public async Task GetStudentsWithoutGroupsAsync()
+    {
+       var students = await _repository.GetStudentsWithoutGroupsAsync();
+       foreach (var student in students)
+       {
+            System.Console.WriteLine(student.StudentID+" "+student.Fullname+" "+student.Email+" "+student.Phone+" "+student.EnrollmentDate);
+       }
+    }
+
+    public async Task GetDroppedOutStudentsAsync()
+    {
+       var students = await _repository.GetDroppedOutStudentsAsync();
+       foreach (var student in students)
+       {
+            System.Console.WriteLine(student.StudentID+" "+student.Fullname+" "+student.Email+" "+student.Phone+" "+student.EnrollmentDate);
+       }
+    }
+
+    public async Task GetGraduatedStudentsAsync()
+    {
+       var students = await _repository.GetGraduatedStudentsAsync();
+       foreach (var student in students)
+       {
+            System.Console.WriteLine(student.StudentID+" "+student.Fullname+" "+student.Email+" "+student.Phone+" "+student.EnrollmentDate);
+       }
+    }
 }

@@ -9,4 +9,7 @@ public interface IGroupService
     Task DeleteGroupAsync(int groupId);
     Task GetGroupAsync(int groupId);
     Task GetAllGroupsAsync();
+
+    Task GetStudentsPerGroupAsync();
+    Task GetEmptyGroupsAsync();
 }

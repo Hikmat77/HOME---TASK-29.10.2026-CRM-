@@ -9,4 +9,8 @@ public interface IStudentService
     Task DeleteStudentAsync(int studentId);
     Task GetStudentAsync(int studentId);
     Task GetAllStudentsAsync();
+    Task GetStudentsWithGroupsAsync();
+    Task GetStudentsWithoutGroupsAsync();
+    Task GetDroppedOutStudentsAsync();
+    Task GetGraduatedStudentsAsync();
 }

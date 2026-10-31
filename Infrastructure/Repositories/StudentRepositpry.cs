@@ -13,22 +13,22 @@ public class StudentRepository(AppDbContext appDbContext) : IStudentRepository
         using var connection = _context.Connection();
         var query = "insert into students(fullname, email, phone, enrollmentdate) values(@fullname, @email, @phone, @enrollmentdate)";
         var result = await connection.ExecuteAsync(query, student);
-        return result>0;
+        return result > 0;
     }
 
     public async Task<bool> DeleteStudentAsync(int studentId)
     {
         using var connection = _context.Connection();
         var query = "delete from students where studentid=@studentid";
-        var result = await connection.ExecuteAsync(query, new{studentId});
-        return result>0;
+        var result = await connection.ExecuteAsync(query, new { studentId });
+        return result > 0;
     }
 
     public async Task<Students> GetStudentAsync(int studentId)
     {
         using var connection = _context.Connection();
         var query = "select * from students where studentid=@studentid";
-        var result = await connection.QuerySingleAsync<Students>(query, new{studentId});
+        var result = await connection.QuerySingleAsync<Students>(query, new { studentId });
         return result;
     }
 
@@ -45,6 +45,38 @@ public class StudentRepository(AppDbContext appDbContext) : IStudentRepository
         using var connection = _context.Connection();
         var query = "update students set fullname=@fullname, email=@email, phone=@phone, enrollmentdate=@enrollmentdate where studentid=@studentid";
         var result = await connection.ExecuteAsync(query, student);
-        return result>0;
+        return result > 0;
+    }
+
+    public async Task<List<dynamic>> GetStudentsWithGroupsAsync()
+    {
+        using var connection = _context.Connection();
+        var query = "select s.studentid, s.fullname, g.groupname from students s join studentgroups sg on sg.studentid=s.studentid join groups g on g.groupid=sg.groupid order by s.studentid";
+        var result = (await connection.QueryAsync(query)).ToList();
+        return result;
+    }
+
+    public async Task<List<Students>> GetStudentsWithoutGroupsAsync()
+    {
+        using var connection = _context.Connection();
+        var query = "select * from students s where not exists (select 1 from studentgroups sg where sg.studentid=s.studentid)";
+        var result = (await connection.QueryAsync<Students>(query)).ToList();
+        return result;
+    }
+
+    public async Task<List<Students>> GetDroppedOutStudentsAsync()
+    {
+        using var connection = _context.Connection();
+        var query = "select distinct s.* from students s join studentgroups sg on sg.studentid=s.studentid where sg.status=1";
+        var result = (await connection.QueryAsync<Students>(query)).ToList();
+        return result;
+    }
+
+    public async Task<List<Students>> GetGraduatedStudentsAsync()
+    {
+        using var connection = _context.Connection();
+        var query = "select distinct s.* from students s join studentgroups sg on sg.studentid=s.studentid join groups g on g.groupid=sg.groupid where g.enddate < current_date";
+        var result = (await connection.QueryAsync<Students>(query)).ToList();
+        return result;
     }
 }

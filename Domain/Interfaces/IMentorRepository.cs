@@ -9,4 +9,6 @@ public interface IMentorRepository
     Task<bool> DeleteMentorAsync(int mentorId);
     Task<Mentors> GetMentorAsync(int mentorId);
     Task<List<Mentors>> GetMentorsAsync();
+    Task<dynamic> GetMentorWithMostStudentsAsync();
+    Task<List<dynamic>> GetMentorsWithMultipleCoursesAsync();
 }

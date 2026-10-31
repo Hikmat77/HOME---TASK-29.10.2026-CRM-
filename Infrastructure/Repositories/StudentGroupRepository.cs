@@ -13,22 +13,22 @@ public class StudentGroupRepository(AppDbContext appDbContext) : IStudentGroupRe
         using var connection = _context.Connection();
         var query = "insert into studentgroups(studentid, groupid, status) values(@studentid, @groupid, @status)";
         var result = await connection.ExecuteAsync(query, studentGroup);
-        return result>0;
+        return result > 0;
     }
 
     public async Task<bool> DeleteStudentGroupAsync(int studentGroupId)
     {
         using var connection = _context.Connection();
         var query = "delete from studentgroups where studentgroupid=@studentgroupid";
-        var result = await connection.ExecuteAsync(query, new{studentGroupId});
-        return result>0;
+        var result = await connection.ExecuteAsync(query, new { studentGroupId });
+        return result > 0;
     }
 
     public async Task<StudentGroups> GetStudentGroupAsync(int studentGroupId)
     {
         using var connection = _context.Connection();
         var query = "select * from studentgroups where studentgroupid=@studentgroupid";
-        var result = await connection.QuerySingleAsync<StudentGroups>(query, new{studentGroupId});
+        var result = await connection.QuerySingleAsync<StudentGroups>(query, new { studentGroupId });
         return result;
     }
 
@@ -45,6 +45,6 @@ public class StudentGroupRepository(AppDbContext appDbContext) : IStudentGroupRe
         using var connection = _context.Connection();
         var query = "update studentgroups set studentid=@studentid, groupid=@groupid, status=@status where studentgroupid=@studentgroupid";
         var result = await connection.ExecuteAsync(query, studentGroup);
-        return result>0;
+        return result > 0;
     }
 }

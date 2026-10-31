@@ -43,4 +43,20 @@ public class MentorService(MentorRepository mentorRepository) : IMentorService
         if(result) System.Console.WriteLine("Updated successfully!");
         else System.Console.WriteLine("Something went wrong!");
     }
+
+    public async Task GetMentorWithMostStudentsAsync()
+    {
+        var mentor = await _repository.GetMentorWithMostStudentsAsync();
+        if(mentor == null) System.Console.WriteLine("Nothing found!");
+        else System.Console.WriteLine(mentor.mentorid+" "+mentor.fullname+" "+mentor.studentcount);
+    }
+
+    public async Task GetMentorsWithMultipleCoursesAsync()
+    {
+       var mentors = await _repository.GetMentorsWithMultipleCoursesAsync();
+       foreach (var mentor in mentors)
+       {
+            System.Console.WriteLine(mentor.mentorid+" "+mentor.fullname+" "+mentor.coursecount);
+       }
+    }
 }

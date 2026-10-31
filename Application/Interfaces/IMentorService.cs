@@ -9,4 +9,7 @@ public interface IMentorService
     Task DeleteMentorAsync(int mentorId);
     Task GetMentorAsync(int mentorId);
     Task GetAllMentorsAsync();
+
+    Task GetMentorWithMostStudentsAsync();
+    Task GetMentorsWithMultipleCoursesAsync();
 }
