@@ -1,64 +1,122 @@
+using System.Net;
+using Application.DTOs;
 using Application.Interfaces;
+using Application.Responses;
+using Domain.Interfaces;
 using Domain.Models;
-using Infrastructure;
-using Infrastructure.Repositories;
 
 namespace Application.Services;
 
-public class GroupService(GroupRepository groupRepository) : IGroupService
+public class GroupService(IGroupRepository groupRepository) : IGroupService
 {
-    private GroupRepository _repository = groupRepository;
-    public async Task AddGroupAsync(Groups group)
+    private IGroupRepository repository = groupRepository;
+    public async Task<ApiResponse<bool>> AddGroupAsync(CreateGroupDto dto)
     {
-        var result = await _repository.AddGroupAsync(group);
-        if(result) System.Console.WriteLine("Added successfully!");
-        else System.Console.WriteLine("Something went wrong!"); 
+        var group = new Groups()
+        {
+            GroupName = dto.GroupName,
+            CourseId = dto.CourseId,
+            MentorId = dto.MentorId,
+            StartDate = dto.StartDate,
+            EndDate = dto.EndDate
+        };
+        var res = await repository.AddGroupAsync(group);
+        return res==true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Added!", res)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not added.", res);
     }
 
-    public async Task DeleteGroupAsync(int groupId)
+    public async Task<ApiResponse<bool>> DeleteGroupAsync(int groupId)
     {
-        var result = await _repository.DeleteGroupAsync(groupId);
-        if(result) System.Console.WriteLine("Deleted successfully!");
-        else System.Console.WriteLine("Something went wrong!"); 
+        var res = await repository.DeleteGroupAsync(groupId);
+        return res==true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Deleted!", res)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not deleted.", res);
     }
 
-    public async Task GetAllGroupsAsync()
+    public async Task<ApiResponse<GroupDto>> GetGroupAsync(int groupId)
     {
-       var groups = await _repository.GetGroupsAsync();
-       foreach (var group in groups)
-       {
-            System.Console.WriteLine(group.GroupId+" "+group.GroupName+" "+group.CourseId+" "+group.MentorId+" "+group.StartDate+" "+group.EndDate);
-       }
+        var group = await repository.GetGroupAsync(groupId);
+        var res = new GroupDto()
+        {
+            GroupId = group.GroupId,
+            GroupName = group.GroupName,
+            CourseId = group.CourseId,
+            MentorId = group.MentorId,
+            StartDate = group.StartDate,
+            EndDate = group.EndDate
+        };
+        return new ApiResponse<GroupDto>(HttpStatusCode.OK, "Group with given id.", res);
     }
 
-    public async Task GetGroupAsync(int groupId)
+    public async Task<ApiResponse<List<GroupDto>>> GetAllGroupsAsync()
     {
-        var group = await _repository.GetGroupAsync(groupId);
-        System.Console.WriteLine(group.GroupId+" "+group.GroupName+" "+group.CourseId+" "+group.MentorId+" "+group.StartDate+" "+group.EndDate);
+        var groups = await repository.GetGroupsAsync();
+        var res = groups.Select(x=>new GroupDto()
+        {
+            GroupId = x.GroupId,
+            GroupName = x.GroupName,
+            CourseId = x.CourseId,
+            MentorId = x.MentorId,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate
+        }).ToList();
+        return new ApiResponse<List<GroupDto>>(HttpStatusCode.OK, "List of groups.", res);
     }
 
-    public async Task UpdateGroupAsync(Groups group)
+    public async Task<ApiResponse<List<GroupWithStudentCount>>> GetStudentsPerGroupAsync()
     {
-        var result = await _repository.UpdateGroupAsync(group);
-        if(result) System.Console.WriteLine("Updated successfully!");
-        else System.Console.WriteLine("Something went wrong!");
+        var groups = await repository.GetStudentsPerGroupAsync();
+        var res = groups.Select(x=>new GroupWithStudentCount()
+        {
+            GroupId = x.groupid,
+            GroupName = x.groupname,
+            StudentCount = x.studentcount
+        }).ToList();
+        return new ApiResponse<List<GroupWithStudentCount>>(HttpStatusCode.OK, "Students per group.", res);
     }
 
-    public async Task GetStudentsPerGroupAsync()
+    public async Task<ApiResponse<List<GroupDto>>> GetEmptyGroupsAsync()
     {
-       var groups = await _repository.GetStudentsPerGroupAsync();
-       foreach (var group in groups)
-       {
-            System.Console.WriteLine(group.groupid+" "+group.groupname+" "+group.studentcount);
-       }
+        var groups = await repository.GetEmptyGroupsAsync();
+        var res = groups.Select(x=>new GroupDto()
+        {
+            GroupId = x.GroupId,
+            GroupName = x.GroupName,
+            CourseId = x.CourseId,
+            MentorId = x.MentorId,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate
+        }).ToList();
+        return new ApiResponse<List<GroupDto>>(HttpStatusCode.OK, "Empty groups.", res);
     }
 
-    public async Task GetEmptyGroupsAsync()
+    public async Task<ApiResponse<int>> GetTotalGroupsCountAsync()
     {
-       var groups = await _repository.GetEmptyGroupsAsync();
-       foreach (var group in groups)
-       {
-            System.Console.WriteLine(group.GroupId+" "+group.GroupName+" "+group.CourseId+" "+group.MentorId+" "+group.StartDate+" "+group.EndDate);
-       }
+        var res = await repository.GetTotalGroupsCountAsync();
+        return new ApiResponse<int>(HttpStatusCode.OK, "Total groups.", res);
+    }
+
+    public async Task<ApiResponse<List<DateTime>>> GetAllStartDatesAsync()
+    {
+        var res = await repository.GetAllStartDatesAsync();
+        return new ApiResponse<List<DateTime>>(HttpStatusCode.OK, "List of start dates.", res);
+    }
+
+    public async Task<ApiResponse<bool>> UpdateGroupAsync(int groupId, UpdateGroupDto dto)
+    {
+        var group = new Groups()
+        {
+            GroupId = groupId,
+            GroupName = dto.GroupName,
+            CourseId = dto.CourseId,
+            MentorId = dto.MentorId,
+            StartDate = dto.StartDate,
+            EndDate = dto.EndDate
+        };
+        var res = await repository.UpdateGroupAsync(group);
+        return res==true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Updated!", res)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not updated.", res);
     }
 }

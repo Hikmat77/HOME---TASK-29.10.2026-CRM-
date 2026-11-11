@@ -11,4 +11,6 @@ public interface IMentorRepository
     Task<List<Mentors>> GetMentorsAsync();
     Task<dynamic> GetMentorWithMostStudentsAsync();
     Task<List<dynamic>> GetMentorsWithMultipleCoursesAsync();
+    Task<int> GetTotalMentorsCountAsync();
+
 }

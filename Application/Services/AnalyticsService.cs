@@ -1,15 +1,16 @@
+using System.Net;
 using Application.Interfaces;
-using Infrastructure;
-using Infrastructure.Repositories;
+using Application.Responses;
+using Domain.Interfaces;
 
 namespace Application.Services;
 
-public class AnalyticsService(AnalyticsRepository analyticsRepository) : IAnalyticsService
+public class AnalyticsService(IAnalyticsRepository analyticsRepository) : IAnalyticsService
 {
-    private AnalyticsRepository _repository = analyticsRepository;
-    public async Task GetCompletionRateAsync()
+    private IAnalyticsRepository repository = analyticsRepository;
+    public async Task<ApiResponse<decimal>> GetCompletionRateAsync()
     {
-        var result = await _repository.GetCompletionRateAsync();
-        System.Console.WriteLine("Completion rate: "+result+"%");
+        var res = await repository.GetCompletionRateAsync();
+        return new ApiResponse<decimal>(HttpStatusCode.OK, "Completion rate.", res);
     }
 }

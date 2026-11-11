@@ -40,14 +40,29 @@ public class MentorRepository(AppDbContext appDbContext) : IMentorRepository
         return result;
     }
 
-    public Task<List<dynamic>> GetMentorsWithMultipleCoursesAsync()
+
+    public async Task<List<dynamic>> GetMentorsWithMultipleCoursesAsync()
     {
-        throw new NotImplementedException();
+        using var connection = _context.Connection();
+        var query = "select m.mentorid, m.fullname, count(distinct g.courseid)::int as coursecount from mentors m join groups g on g.mentorid=m.mentorid group by m.mentorid, m.fullname having count(distinct g.courseid) > 1";
+        var result = (await connection.QueryAsync(query)).ToList();
+        return result;
     }
 
-    public Task<dynamic> GetMentorWithMostStudentsAsync()
+    public async Task<dynamic> GetMentorWithMostStudentsAsync()
     {
-        throw new NotImplementedException();
+        using var connection = _context.Connection();
+        var query = "select m.mentorid, m.fullname, count(distinct sg.studentid)::int as studentcount from mentors m left join groups g on g.mentorid=m.mentorid left join studentgroups sg on sg.groupid=g.groupid group by m.mentorid, m.fullname order by studentcount desc limit 1";
+        var result = await connection.QueryFirstOrDefaultAsync(query);
+        return result;
+    }
+
+    public async Task<int> GetTotalMentorsCountAsync()
+    {
+        using var connection = _context.Connection();
+        var query = "select count(*) from mentors";
+        var result = await connection.ExecuteScalarAsync<int>(query);
+        return result;
     }
 
 

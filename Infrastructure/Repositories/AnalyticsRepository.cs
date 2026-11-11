@@ -11,7 +11,6 @@ public class AnalyticsRepository(AppDbContext appDbContext) : IAnalyticsReposito
     {
         using var connection = _context.Connection();
         var query = "select case when count(distinct studentid)=0 then 0 else round(100.0 * count(distinct studentid) filter (where status=2) / count(distinct studentid), 2) end from studentgroups";
-        var result = await connection.ExecuteScalarAsync<decimal>(query);
-        return result;
+        return await connection.ExecuteScalarAsync<decimal>(query);
     }
 }

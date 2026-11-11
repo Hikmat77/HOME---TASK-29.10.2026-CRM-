@@ -1,3 +1,4 @@
+
 namespace Domain.Interfaces;
 
 public interface IStatisticsRepository

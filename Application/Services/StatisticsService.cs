@@ -1,4 +1,7 @@
+
+using System.Net;
 using Application.Interfaces;
+using Application.Responses;
 using Infrastructure;
 using Infrastructure.Repositories;
 
@@ -7,36 +10,34 @@ namespace Application.Services;
 public class StatisticsService(StatisticsRepository statisticsRepository) : IStatisticsService
 {
     private StatisticsRepository _repository = statisticsRepository;
-    public async Task GetTotalStudentsCountAsync()
+
+    public async Task<ApiResponse<int>> GetTotalStudentsCountAsync()
     {
-        var result = await _repository.GetTotalStudentsCountAsync();
-        System.Console.WriteLine("Total students: "+result);
+        var res = await _repository.GetTotalStudentsCountAsync();
+        return new ApiResponse<int>(HttpStatusCode.OK, "Total students.", res);
     }
 
-    public async Task GetTotalGroupsCountAsync()
+    public async Task<ApiResponse<int>> GetTotalGroupsCountAsync()
     {
-        var result = await _repository.GetTotalGroupsCountAsync();
-        System.Console.WriteLine("Total groups: "+result);
+        var res = await _repository.GetTotalGroupsCountAsync();
+        return new ApiResponse<int>(HttpStatusCode.OK, "Total groups.", res);
     }
 
-    public async Task GetTotalCoursesCountAsync()
+    public async Task<ApiResponse<int>> GetTotalCoursesCountAsync()
     {
-        var result = await _repository.GetTotalCoursesCountAsync();
-        System.Console.WriteLine("Total courses: "+result);
+        var res = await _repository.GetTotalCoursesCountAsync();
+        return new ApiResponse<int>(HttpStatusCode.OK, "Total courses.", res);
     }
 
-    public async Task GetTotalMentorsCountAsync()
+    public async Task<ApiResponse<int>> GetTotalMentorsCountAsync()
     {
-        var result = await _repository.GetTotalMentorsCountAsync();
-        System.Console.WriteLine("Total mentors: "+result);
+        var res = await _repository.GetTotalMentorsCountAsync();
+        return new ApiResponse<int>(HttpStatusCode.OK, "Total mentors.", res);
     }
 
-    public async Task GetAllStartDatesAsync()
+    public async Task<ApiResponse<List<DateTime>>> GetAllStartDatesAsync()
     {
-       var dates = await _repository.GetAllStartDatesAsync();
-       foreach (var date in dates)
-       {
-            System.Console.WriteLine(DateOnly.FromDateTime(date));
-       }
+        var res = await _repository.GetAllStartDatesAsync();
+        return new ApiResponse<List<DateTime>>(HttpStatusCode.OK, "All start dates.", res);
     }
 }

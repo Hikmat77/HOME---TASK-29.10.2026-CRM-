@@ -11,4 +11,6 @@ public interface IGroupRepository
     Task<List<Groups>> GetGroupsAsync();
     Task<List<dynamic>> GetStudentsPerGroupAsync();
     Task<List<Groups>> GetEmptyGroupsAsync();
+    Task<List<DateTime>> GetAllStartDatesAsync();
+    Task<int> GetTotalGroupsCountAsync();
 }

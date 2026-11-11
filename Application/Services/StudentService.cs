@@ -1,82 +1,132 @@
+using System.Net;
+using Application.DTOs;
 using Application.Interfaces;
+using Application.Responses;
+using Domain.Interfaces;
 using Domain.Models;
-using Infrastructure;
-using Infrastructure.Repositories;
 
 namespace Application.Services;
 
-public class StudentService(StudentRepository studentRepository) : IStudentService
+public class StudentService(IStudentRepository studentRepository) : IStudentService
 {
-    private StudentRepository _repository = studentRepository;
-    public async Task AddStudentAsync(Students student)
+    private IStudentRepository repository = studentRepository;
+    public async Task<ApiResponse<bool>> AddStudentAsync(CreateStudentDto dto)
     {
-        var result = await _repository.AddStudentAsync(student);
-        if(result) System.Console.WriteLine("Added successfully!");
-        else System.Console.WriteLine("Something went wrong!"); 
+        var student = new Students()
+        {
+            Fullname = dto.Fullname,
+            Email = dto.Email,
+            Phone = dto.Phone,
+            EnrollmentDate = dto.EnrollmentDate
+        };
+        var res = await repository.AddStudentAsync(student);
+        return res==true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Added!", res)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not added.", res);
     }
 
-    public async Task DeleteStudentAsync(int studentId)
+    public async Task<ApiResponse<bool>> DeleteStudentAsync(int studentId)
     {
-        var result = await _repository.DeleteStudentAsync(studentId);
-        if(result) System.Console.WriteLine("Deleted successfully!");
-        else System.Console.WriteLine("Something went wrong!"); 
+        var res = await repository.DeleteStudentAsync(studentId);
+        return res==true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Deleted!", res)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not deleted.", res);
     }
 
-    public async Task GetAllStudentsAsync()
+    public async Task<ApiResponse<StudentDto>> GetStudentAsync(int studentId)
     {
-       var students = await _repository.GetStudentsAsync();
-       foreach (var student in students)
-       {
-            System.Console.WriteLine(student.StudentID+" "+student.Fullname+" "+student.Email+" "+student.Phone+" "+student.EnrollmentDate);
-       }
+        var student = await repository.GetStudentAsync(studentId);
+        var res = new StudentDto()
+        {
+            StudentID = student.StudentID,
+            Fullname = student.Fullname,
+            Email = student.Email,
+            Phone = student.Phone,
+            EnrollmentDate = student.EnrollmentDate
+        };
+        return new ApiResponse<StudentDto>(HttpStatusCode.OK, "Student with given id.", res);
     }
 
-    public async Task GetStudentAsync(int studentId)
+    public async Task<ApiResponse<List<StudentDto>>> GetAllStudentsAsync()
     {
-        var student = await _repository.GetStudentAsync(studentId);
-        System.Console.WriteLine(student.StudentID+" "+student.Fullname+" "+student.Email+" "+student.Phone+" "+student.EnrollmentDate);
+        var students = await repository.GetStudentsAsync();
+        var res = students.Select(x=>new StudentDto()
+        {
+            StudentID = x.StudentID,
+            Fullname = x.Fullname,
+            Email = x.Email,
+            Phone = x.Phone,
+            EnrollmentDate = x.EnrollmentDate
+        }).ToList();
+        return new ApiResponse<List<StudentDto>>(HttpStatusCode.OK, "List of students.", res);
     }
 
-    public async Task UpdateStudentAsync(Students student)
+    public async Task<ApiResponse<List<StudentWithGroup>>> GetStudentsWithGroupsAsync()
     {
-        var result = await _repository.UpdateStudentAsync(student);
-        if(result) System.Console.WriteLine("Updated successfully!");
-        else System.Console.WriteLine("Something went wrong!");
+        var students = await repository.GetStudentsWithGroupsAsync();
+        var res = students.Select(x=>new StudentWithGroup()
+        {
+            StudentID = x.studentid,
+            Fullname = x.fullname,
+            GroupName = x.groupname
+        }).ToList();
+        return new ApiResponse<List<StudentWithGroup>>(HttpStatusCode.OK, "Students with groups.", res);
     }
 
-    public async Task GetStudentsWithGroupsAsync()
+    public async Task<ApiResponse<List<StudentDto>>> GetStudentsWithoutGroupsAsync()
     {
-       var students = await _repository.GetStudentsWithGroupsAsync();
-       foreach (var student in students)
-       {
-            System.Console.WriteLine(student.studentid+" "+student.fullname+" "+student.groupname);
-       }
+        var students = await repository.GetStudentsWithoutGroupsAsync();
+        var res = students.Select(x=>new StudentDto()
+        {
+            StudentID = x.StudentID,
+            Fullname = x.Fullname,
+            Email = x.Email,
+            Phone = x.Phone,
+            EnrollmentDate = x.EnrollmentDate
+        }).ToList();
+        return new ApiResponse<List<StudentDto>>(HttpStatusCode.OK, "Students without groups.", res);
     }
 
-    public async Task GetStudentsWithoutGroupsAsync()
+    public async Task<ApiResponse<List<StudentDto>>> GetDroppedOutStudentsAsync()
     {
-       var students = await _repository.GetStudentsWithoutGroupsAsync();
-       foreach (var student in students)
-       {
-            System.Console.WriteLine(student.StudentID+" "+student.Fullname+" "+student.Email+" "+student.Phone+" "+student.EnrollmentDate);
-       }
+        var students = await repository.GetDroppedOutStudentsAsync();
+        var res = students.Select(x=>new StudentDto()
+        {
+            StudentID = x.StudentID,
+            Fullname = x.Fullname,
+            Email = x.Email,
+            Phone = x.Phone,
+            EnrollmentDate = x.EnrollmentDate
+        }).ToList();
+        return new ApiResponse<List<StudentDto>>(HttpStatusCode.OK, "Dropped out students.", res);
     }
 
-    public async Task GetDroppedOutStudentsAsync()
+    public async Task<ApiResponse<List<StudentDto>>> GetGraduatedStudentsAsync()
     {
-       var students = await _repository.GetDroppedOutStudentsAsync();
-       foreach (var student in students)
-       {
-            System.Console.WriteLine(student.StudentID+" "+student.Fullname+" "+student.Email+" "+student.Phone+" "+student.EnrollmentDate);
-       }
+        var students = await repository.GetGraduatedStudentsAsync();
+        var res = students.Select(x=>new StudentDto()
+        {
+            StudentID = x.StudentID,
+            Fullname = x.Fullname,
+            Email = x.Email,
+            Phone = x.Phone,
+            EnrollmentDate = x.EnrollmentDate
+        }).ToList();
+        return new ApiResponse<List<StudentDto>>(HttpStatusCode.OK, "Graduated students.", res);
     }
-
-    public async Task GetGraduatedStudentsAsync()
+    public async Task<ApiResponse<bool>> UpdateStudentAsync(int studentId, UpdateStudentDto dto)
     {
-       var students = await _repository.GetGraduatedStudentsAsync();
-       foreach (var student in students)
-       {
-            System.Console.WriteLine(student.StudentID+" "+student.Fullname+" "+student.Email+" "+student.Phone+" "+student.EnrollmentDate);
-       }
+        var student = new Students()
+        {
+            StudentID = studentId,
+            Fullname = dto.Fullname,
+            Email = dto.Email,
+            Phone = dto.Phone,
+            EnrollmentDate = dto.EnrollmentDate
+        };
+        var res = await repository.UpdateStudentAsync(student);
+        return res==true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Updated!", res)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not updated.", res);
     }
 }

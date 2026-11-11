@@ -63,4 +63,23 @@ public class GroupRepository(AppDbContext appDbContext) : IGroupRepository
         var result = (await connection.QueryAsync<Groups>(query)).ToList();
         return result;
     }
+
+
+    public async Task<List<DateTime>> GetAllStartDatesAsync()
+    {
+        using var connection = _context.Connection();
+        var query = "select startdate from groups";
+        var result = (await connection.QueryAsync<DateTime>(query)).ToList();
+        return result;
+    }
+
+    public async Task<int> GetTotalGroupsCountAsync()
+    {
+        using var connection = _context.Connection();
+        var query = "select count(*) from groups";
+        var result = await connection.ExecuteScalarAsync<int>(query);
+        return result;
+    }
+
+
 }

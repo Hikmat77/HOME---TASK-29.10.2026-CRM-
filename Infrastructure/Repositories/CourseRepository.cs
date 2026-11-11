@@ -79,4 +79,12 @@ public class CourseRepository(AppDbContext appDbContext) : ICourseRepository
         var result = (await connection.QueryAsync(query)).ToList();
         return result;
     }
+
+    public async Task<int> GetTotalCoursesCountAsync()
+    {
+        using var connection = _context.Connection();
+        var query = "select count(*) from courses";
+        var result = await connection.ExecuteScalarAsync<int>(query);
+        return result;
+    }
 }
