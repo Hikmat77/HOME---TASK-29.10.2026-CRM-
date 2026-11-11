@@ -1,44 +1,43 @@
+using Application.DTOs;
 using Application.Interfaces;
 using Application.Responses;
-using Domain.Interfaces;
-using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Controllers;
+namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class StudentGroupsController(IStudentGroupService studentGroupService) : ControllerBase
 {
-    IStudentGroupService service = studentGroupService;
+    private IStudentGroupService service = studentGroupService;
 
     [HttpPost]
-    public async Task<ApiResponse<bool>> AddStudentGroups(StudentGroups studentGroups)
+    public async Task<ApiResponse<bool>> AddStudentGroup(CreateStudentGroupDto dto)
     {
-        return await service.AddStudentGroupAsync(studentGroups);
+        return await service.AddStudentGroupAsync(dto);
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<ApiResponse<bool>> UpdateStudentGroup(int id, UpdateStudentGroupDto dto)
+    {
+        return await service.UpdateStudentGroupAsync(id, dto);
     }
 
     [HttpDelete]
-    public async Task<ApiResponse<bool>> DeleteStudentGroups(int id)
+    public async Task<ApiResponse<bool>> DeleteStudentGroup(int id)
     {
         return await service.DeleteStudentGroupAsync(id);
     }
 
-    [HttpPut]
-    public async Task<ApiResponse<bool>> UpdateStudentGroups(StudentGroups studentGroups)
-    {
-        return await service.UpdateStudentGroupAsync(studentGroups);
-    }
-
     [HttpGet("{id:int}")]
-    public async Task<ApiResponse<StudentGroups>> GetStudentGroups(int id)
+    public async Task<ApiResponse<StudentGroupDto>> GetStudentGroup(int id)
     {
         return await service.GetStudentGroupAsync(id);
     }
 
     [HttpGet]
-    public async Task<ApiResponse<List<StudentGroups>>> GetStudentGroups()
+    public async Task<ApiResponse<List<StudentGroupDto>>> GetStudentGroups()
     {
-        return await service.GetStudentGroupsAsync();
+        return await service.GetAllStudentGroupsAsync();
     }
 }
