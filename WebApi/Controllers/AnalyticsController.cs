@@ -20,3 +20,4 @@ public class AnalyticsController(
         return await service.GetCompletionRateAsync();
     }
 }
+
